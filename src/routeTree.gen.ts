@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAccessRouteImport } from './routes/admin.access'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
+import { Route as AdminAnticheatRouteImport } from './routes/admin.anticheat'
 import { Route as AdminApprovalsRouteImport } from './routes/admin.approvals'
 import { Route as AdminEconomyRouteImport } from './routes/admin.economy'
 import { Route as AdminEventsRouteImport } from './routes/admin.events'
@@ -37,9 +39,19 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAccessRoute = AdminAccessRouteImport.update({
+  id: '/access',
+  path: '/access',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAccountsRoute = AdminAccountsRouteImport.update({
   id: '/accounts',
   path: '/accounts',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAnticheatRoute = AdminAnticheatRouteImport.update({
+  id: '/anticheat',
+  path: '/anticheat',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminApprovalsRoute = AdminApprovalsRouteImport.update({
@@ -86,7 +98,9 @@ const ApiAdminSplatRoute = ApiAdminSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/admin/access': typeof AdminAccessRoute
   '/admin/accounts': typeof AdminAccountsRoute
+  '/admin/anticheat': typeof AdminAnticheatRoute
   '/admin/approvals': typeof AdminApprovalsRoute
   '/admin/economy': typeof AdminEconomyRoute
   '/admin/events': typeof AdminEventsRoute
@@ -99,7 +113,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/access': typeof AdminAccessRoute
   '/admin/accounts': typeof AdminAccountsRoute
+  '/admin/anticheat': typeof AdminAnticheatRoute
   '/admin/approvals': typeof AdminApprovalsRoute
   '/admin/economy': typeof AdminEconomyRoute
   '/admin/events': typeof AdminEventsRoute
@@ -114,7 +130,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/admin/access': typeof AdminAccessRoute
   '/admin/accounts': typeof AdminAccountsRoute
+  '/admin/anticheat': typeof AdminAnticheatRoute
   '/admin/approvals': typeof AdminApprovalsRoute
   '/admin/economy': typeof AdminEconomyRoute
   '/admin/events': typeof AdminEventsRoute
@@ -130,7 +148,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/admin/access'
     | '/admin/accounts'
+    | '/admin/anticheat'
     | '/admin/approvals'
     | '/admin/economy'
     | '/admin/events'
@@ -143,7 +163,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin/access'
     | '/admin/accounts'
+    | '/admin/anticheat'
     | '/admin/approvals'
     | '/admin/economy'
     | '/admin/events'
@@ -157,7 +179,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/admin/access'
     | '/admin/accounts'
+    | '/admin/anticheat'
     | '/admin/approvals'
     | '/admin/economy'
     | '/admin/events'
@@ -198,11 +222,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/access': {
+      id: '/admin/access'
+      path: '/access'
+      fullPath: '/admin/access'
+      preLoaderRoute: typeof AdminAccessRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/accounts': {
       id: '/admin/accounts'
       path: '/accounts'
       fullPath: '/admin/accounts'
       preLoaderRoute: typeof AdminAccountsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/anticheat': {
+      id: '/admin/anticheat'
+      path: '/anticheat'
+      fullPath: '/admin/anticheat'
+      preLoaderRoute: typeof AdminAnticheatRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/approvals': {
@@ -265,7 +303,9 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAccessRoute: typeof AdminAccessRoute
   AdminAccountsRoute: typeof AdminAccountsRoute
+  AdminAnticheatRoute: typeof AdminAnticheatRoute
   AdminApprovalsRoute: typeof AdminApprovalsRoute
   AdminEconomyRoute: typeof AdminEconomyRoute
   AdminEventsRoute: typeof AdminEventsRoute
@@ -277,7 +317,9 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAccessRoute: AdminAccessRoute,
   AdminAccountsRoute: AdminAccountsRoute,
+  AdminAnticheatRoute: AdminAnticheatRoute,
   AdminApprovalsRoute: AdminApprovalsRoute,
   AdminEconomyRoute: AdminEconomyRoute,
   AdminEventsRoute: AdminEventsRoute,
