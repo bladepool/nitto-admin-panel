@@ -34,6 +34,52 @@ export class ApiError extends Error {
 
 type Json = Record<string, unknown>;
 
+/*
+ * Game API credential. The game server's staff routes (badges, tournaments,
+ * events/awards, mod lookup) authenticate with either a staff player's Bearer
+ * session key (clientRole >= 2) or the server-to-server `x-admin-key`; they do
+ * not read this panel's cookie. The credential lives in sessionStorage (this tab
+ * only, cleared when it closes) and is attached to every API call.
+ */
+export type GameAuth = { mode: "session" | "key"; token: string; label?: string };
+
+const GAME_AUTH_STORAGE = "rl.gameApiAuth";
+
+export function getGameAuth(): GameAuth | null {
+  try {
+    if (typeof window === "undefined") return null;
+    const raw = window.sessionStorage.getItem(GAME_AUTH_STORAGE);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<GameAuth>;
+    if ((parsed.mode !== "session" && parsed.mode !== "key") || !parsed.token) return null;
+    return {
+      mode: parsed.mode,
+      token: String(parsed.token),
+      ...(parsed.label ? { label: String(parsed.label) } : {}),
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function setGameAuth(auth: GameAuth | null): void {
+  try {
+    if (typeof window === "undefined") return;
+    if (auth) window.sessionStorage.setItem(GAME_AUTH_STORAGE, JSON.stringify(auth));
+    else window.sessionStorage.removeItem(GAME_AUTH_STORAGE);
+  } catch {
+    // Storage blocked: the credential simply is not remembered.
+  }
+}
+
+function gameAuthHeaders(): Record<string, string> {
+  const auth = getGameAuth();
+  if (!auth) return {};
+  return auth.mode === "key"
+    ? { "x-admin-key": auth.token }
+    : { Authorization: `Bearer ${auth.token}` };
+}
+
 export type QueryParams = Record<string, string | number | boolean | undefined | null>;
 
 export function buildQuery(params: QueryParams = {}): string {
@@ -59,7 +105,10 @@ export async function api<T = Json>(
       credentials: "include",
       headers: {
         Accept: "application/json",
+        // CSRF guard for the staff cookie: the game API refuses cookie-authenticated writes without it.
+        "x-rl-staff": "1",
         ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
+        ...gameAuthHeaders(),
         ...(headers as Record<string, string> | undefined),
       },
       body: body === undefined ? null : JSON.stringify(body),
@@ -205,6 +254,34 @@ export function timeLabel(value?: string | number | null): string {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "—";
   return date.toLocaleTimeString();
+}
+
+/** Unix seconds (the tournament tables store starts_at etc. as epoch seconds). */
+export function unixLabel(seconds?: number | null): string {
+  if (!seconds) return "—";
+  return dateLabel(Number(seconds) * 1000);
+}
+
+/* ---------------------------- racer lookup ------------------------------ */
+
+export type RacerCard = {
+  id: number;
+  username: string;
+  team: string | null;
+  badges: string[];
+  score: number;
+  rankTitle: string;
+  member: boolean;
+  role: number;
+  banned: boolean;
+};
+
+/** Staff racer lookup by exact handle (GET /api/mod/lookup). */
+export async function lookupRacer(handle: string): Promise<RacerCard> {
+  const payload = await api<{ player: RacerCard }>(
+    `/api/mod/lookup${buildQuery({ handle: handle.trim() })}`,
+  );
+  return payload.player;
 }
 
 export function relativeLabel(value?: string | number | null): string {

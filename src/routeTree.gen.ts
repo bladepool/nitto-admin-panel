@@ -16,13 +16,18 @@ import { Route as AdminAccessRouteImport } from './routes/admin.access'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
 import { Route as AdminAnticheatRouteImport } from './routes/admin.anticheat'
 import { Route as AdminApprovalsRouteImport } from './routes/admin.approvals'
+import { Route as AdminBadgesRouteImport } from './routes/admin.badges'
+import { Route as AdminDiscordRouteImport } from './routes/admin.discord'
 import { Route as AdminEconomyRouteImport } from './routes/admin.economy'
 import { Route as AdminEventsRouteImport } from './routes/admin.events'
 import { Route as AdminLiveRouteImport } from './routes/admin.live'
+import { Route as AdminMigrationsRouteImport } from './routes/admin.migrations'
 import { Route as AdminObservabilityRouteImport } from './routes/admin.observability'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminTeamsRouteImport } from './routes/admin.teams'
+import { Route as AdminTournamentsRouteImport } from './routes/admin.tournaments'
 import { Route as ApiAdminSplatRouteImport } from './routes/api/admin/$'
+import { Route as ApiModSplatRouteImport } from './routes/api/mod/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -59,6 +64,16 @@ const AdminApprovalsRoute = AdminApprovalsRouteImport.update({
   path: '/approvals',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBadgesRoute = AdminBadgesRouteImport.update({
+  id: '/badges',
+  path: '/badges',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDiscordRoute = AdminDiscordRouteImport.update({
+  id: '/discord',
+  path: '/discord',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminEconomyRoute = AdminEconomyRouteImport.update({
   id: '/economy',
   path: '/economy',
@@ -72,6 +87,11 @@ const AdminEventsRoute = AdminEventsRouteImport.update({
 const AdminLiveRoute = AdminLiveRouteImport.update({
   id: '/live',
   path: '/live',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMigrationsRoute = AdminMigrationsRouteImport.update({
+  id: '/migrations',
+  path: '/migrations',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminObservabilityRoute = AdminObservabilityRouteImport.update({
@@ -89,9 +109,19 @@ const AdminTeamsRoute = AdminTeamsRouteImport.update({
   path: '/teams',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTournamentsRoute = AdminTournamentsRouteImport.update({
+  id: '/tournaments',
+  path: '/tournaments',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ApiAdminSplatRoute = ApiAdminSplatRouteImport.update({
   id: '/api/admin/$',
   path: '/api/admin/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiModSplatRoute = ApiModSplatRouteImport.update({
+  id: '/api/mod/$',
+  path: '/api/mod/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -102,14 +132,19 @@ export interface FileRoutesByFullPath {
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/anticheat': typeof AdminAnticheatRoute
   '/admin/approvals': typeof AdminApprovalsRoute
+  '/admin/badges': typeof AdminBadgesRoute
+  '/admin/discord': typeof AdminDiscordRoute
   '/admin/economy': typeof AdminEconomyRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/live': typeof AdminLiveRoute
+  '/admin/migrations': typeof AdminMigrationsRoute
   '/admin/observability': typeof AdminObservabilityRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/teams': typeof AdminTeamsRoute
+  '/admin/tournaments': typeof AdminTournamentsRoute
   '/admin/': typeof AdminIndexRoute
   '/api/admin/$': typeof ApiAdminSplatRoute
+  '/api/mod/$': typeof ApiModSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,14 +152,19 @@ export interface FileRoutesByTo {
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/anticheat': typeof AdminAnticheatRoute
   '/admin/approvals': typeof AdminApprovalsRoute
+  '/admin/badges': typeof AdminBadgesRoute
+  '/admin/discord': typeof AdminDiscordRoute
   '/admin/economy': typeof AdminEconomyRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/live': typeof AdminLiveRoute
+  '/admin/migrations': typeof AdminMigrationsRoute
   '/admin/observability': typeof AdminObservabilityRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/teams': typeof AdminTeamsRoute
+  '/admin/tournaments': typeof AdminTournamentsRoute
   '/admin': typeof AdminIndexRoute
   '/api/admin/$': typeof ApiAdminSplatRoute
+  '/api/mod/$': typeof ApiModSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -134,14 +174,19 @@ export interface FileRoutesById {
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/anticheat': typeof AdminAnticheatRoute
   '/admin/approvals': typeof AdminApprovalsRoute
+  '/admin/badges': typeof AdminBadgesRoute
+  '/admin/discord': typeof AdminDiscordRoute
   '/admin/economy': typeof AdminEconomyRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/live': typeof AdminLiveRoute
+  '/admin/migrations': typeof AdminMigrationsRoute
   '/admin/observability': typeof AdminObservabilityRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/teams': typeof AdminTeamsRoute
+  '/admin/tournaments': typeof AdminTournamentsRoute
   '/admin/': typeof AdminIndexRoute
   '/api/admin/$': typeof ApiAdminSplatRoute
+  '/api/mod/$': typeof ApiModSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -152,14 +197,19 @@ export interface FileRouteTypes {
     | '/admin/accounts'
     | '/admin/anticheat'
     | '/admin/approvals'
+    | '/admin/badges'
+    | '/admin/discord'
     | '/admin/economy'
     | '/admin/events'
     | '/admin/live'
+    | '/admin/migrations'
     | '/admin/observability'
     | '/admin/security'
     | '/admin/teams'
+    | '/admin/tournaments'
     | '/admin/'
     | '/api/admin/$'
+    | '/api/mod/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -167,14 +217,19 @@ export interface FileRouteTypes {
     | '/admin/accounts'
     | '/admin/anticheat'
     | '/admin/approvals'
+    | '/admin/badges'
+    | '/admin/discord'
     | '/admin/economy'
     | '/admin/events'
     | '/admin/live'
+    | '/admin/migrations'
     | '/admin/observability'
     | '/admin/security'
     | '/admin/teams'
+    | '/admin/tournaments'
     | '/admin'
     | '/api/admin/$'
+    | '/api/mod/$'
   id:
     | '__root__'
     | '/'
@@ -183,20 +238,26 @@ export interface FileRouteTypes {
     | '/admin/accounts'
     | '/admin/anticheat'
     | '/admin/approvals'
+    | '/admin/badges'
+    | '/admin/discord'
     | '/admin/economy'
     | '/admin/events'
     | '/admin/live'
+    | '/admin/migrations'
     | '/admin/observability'
     | '/admin/security'
     | '/admin/teams'
+    | '/admin/tournaments'
     | '/admin/'
     | '/api/admin/$'
+    | '/api/mod/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   ApiAdminSplatRoute: typeof ApiAdminSplatRoute
+  ApiModSplatRoute: typeof ApiModSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -250,6 +311,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminApprovalsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/badges': {
+      id: '/admin/badges'
+      path: '/badges'
+      fullPath: '/admin/badges'
+      preLoaderRoute: typeof AdminBadgesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/discord': {
+      id: '/admin/discord'
+      path: '/discord'
+      fullPath: '/admin/discord'
+      preLoaderRoute: typeof AdminDiscordRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/economy': {
       id: '/admin/economy'
       path: '/economy'
@@ -269,6 +344,13 @@ declare module '@tanstack/react-router' {
       path: '/live'
       fullPath: '/admin/live'
       preLoaderRoute: typeof AdminLiveRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/migrations': {
+      id: '/admin/migrations'
+      path: '/migrations'
+      fullPath: '/admin/migrations'
+      preLoaderRoute: typeof AdminMigrationsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/observability': {
@@ -292,11 +374,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTeamsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/tournaments': {
+      id: '/admin/tournaments'
+      path: '/tournaments'
+      fullPath: '/admin/tournaments'
+      preLoaderRoute: typeof AdminTournamentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/api/admin/$': {
       id: '/api/admin/$'
       path: '/api/admin/$'
       fullPath: '/api/admin/$'
       preLoaderRoute: typeof ApiAdminSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mod/$': {
+      id: '/api/mod/$'
+      path: '/api/mod/$'
+      fullPath: '/api/mod/$'
+      preLoaderRoute: typeof ApiModSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -307,12 +403,16 @@ interface AdminRouteChildren {
   AdminAccountsRoute: typeof AdminAccountsRoute
   AdminAnticheatRoute: typeof AdminAnticheatRoute
   AdminApprovalsRoute: typeof AdminApprovalsRoute
+  AdminBadgesRoute: typeof AdminBadgesRoute
+  AdminDiscordRoute: typeof AdminDiscordRoute
   AdminEconomyRoute: typeof AdminEconomyRoute
   AdminEventsRoute: typeof AdminEventsRoute
   AdminLiveRoute: typeof AdminLiveRoute
+  AdminMigrationsRoute: typeof AdminMigrationsRoute
   AdminObservabilityRoute: typeof AdminObservabilityRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminTeamsRoute: typeof AdminTeamsRoute
+  AdminTournamentsRoute: typeof AdminTournamentsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -321,12 +421,16 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAccountsRoute: AdminAccountsRoute,
   AdminAnticheatRoute: AdminAnticheatRoute,
   AdminApprovalsRoute: AdminApprovalsRoute,
+  AdminBadgesRoute: AdminBadgesRoute,
+  AdminDiscordRoute: AdminDiscordRoute,
   AdminEconomyRoute: AdminEconomyRoute,
   AdminEventsRoute: AdminEventsRoute,
   AdminLiveRoute: AdminLiveRoute,
+  AdminMigrationsRoute: AdminMigrationsRoute,
   AdminObservabilityRoute: AdminObservabilityRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminTeamsRoute: AdminTeamsRoute,
+  AdminTournamentsRoute: AdminTournamentsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -336,6 +440,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   ApiAdminSplatRoute: ApiAdminSplatRoute,
+  ApiModSplatRoute: ApiModSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

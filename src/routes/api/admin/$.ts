@@ -1,26 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-/*
- * The real admin API lives on the game server, not on this host. Without this
- * catch-all, any /api/admin/* fetch hits the router with no matching route and
- * the SSR handler answers 500 with an HTML-ish error body — which surfaces as a
- * blank screen. Answering with a small JSON 404 lets the client mark the API as
- * "not available here" and render its offline state instead.
- */
-const unavailable = () =>
-  Response.json(
-    { ok: false, reason: "admin_api_not_mounted" },
-    { status: 404, headers: { "cache-control": "no-store" } },
-  );
+import { gameApiHandlers } from "@/lib/game-proxy";
 
+/*
+ * The real admin API lives on the game server. In production this catch-all relays every
+ * /api/admin/* call there (GAME_API_ORIGIN) so the staff cookie stays first-party to the panel; with
+ * no origin configured it answers a small JSON 404 so the UI renders its offline state instead of a
+ * blank SSR error page. See src/lib/game-proxy.ts.
+ */
 export const Route = createFileRoute("/api/admin/$")({
-  server: {
-    handlers: {
-      GET: unavailable,
-      POST: unavailable,
-      PUT: unavailable,
-      PATCH: unavailable,
-      DELETE: unavailable,
-    },
-  },
+  server: { handlers: gameApiHandlers },
 });

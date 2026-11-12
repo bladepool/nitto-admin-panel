@@ -25,12 +25,17 @@ export default defineConfig({
       // be blocked by the browser -- this keeps everything same-origin from the browser's view,
       // matching how it actually runs in production. Override the target with
       // NITTO_BACKEND_PROXY_TARGET if the backend runs on a different host/port locally.
-      proxy: {
-        "/api/admin": {
-          target: process.env.NITTO_BACKEND_PROXY_TARGET || "http://localhost:8082",
-          changeOrigin: true,
-        },
-      },
+      // /api/mod (racer lookup) and /api/auth (game login for the staff-route credential) are
+      // game-API routes the Tournaments / Badges / Events pages also call.
+      proxy: Object.fromEntries(
+        ["/api/admin", "/api/mod", "/api/auth"].map((prefix) => [
+          prefix,
+          {
+            target: process.env["NITTO_BACKEND_PROXY_TARGET"] || "http://localhost:8082",
+            changeOrigin: true,
+          },
+        ]),
+      ),
     },
   },
 });

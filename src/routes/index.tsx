@@ -36,6 +36,28 @@ function LoginPage() {
   const queryClient = useQueryClient();
   const { session, apiOffline, isLoading } = useAdminSession();
   const [status, setStatus] = useState<{ text: string; tone: Tone }>({ text: "", tone: "" });
+  const [discordEnabled, setDiscordEnabled] = useState(false);
+
+  // Is staff Discord sign-in configured on the game API? Also surface an error the callback sent back.
+  useEffect(() => {
+    api<{ enabled?: boolean }>("/api/admin/auth/discord/status")
+      .then((r) => setDiscordEnabled(Boolean(r.enabled)))
+      .catch(() => setDiscordEnabled(false));
+    const code = new URLSearchParams(window.location.search).get("discord");
+    if (code) {
+      const messages: Record<string, string> = {
+        "not-linked":
+          "That Discord account isn't linked to a racer. Link it on the racer site's Account page first.",
+        "not-staff": "That Discord account's racer isn't staff (Moderator and up).",
+        banned: "That racer is banned.",
+        denied: "Discord sign-in was cancelled.",
+        state: "Discord sign-in expired or came from another tab. Try again.",
+        discord: "Discord didn't answer. Try again in a moment.",
+      };
+      setStatus({ text: messages[code] ?? "Discord sign-in failed.", tone: "error" });
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
 
   // An already-approved session shouldn't sit on the sign-in screen.
   useEffect(() => {
@@ -108,11 +130,28 @@ function LoginPage() {
           }}
         >
           <div className="flex flex-col gap-4">
+            {discordEnabled && (
+              <>
+                <Button
+                  type="button"
+                  className="w-full bg-[#5865F2] text-white hover:bg-[#4752C4]"
+                  onClick={() => {
+                    setStatus({ text: "Opening Discord…", tone: "" });
+                    window.location.assign("/api/admin/auth/discord/start");
+                  }}
+                >
+                  Sign in with Discord
+                </Button>
+                <p className="text-center text-xs text-muted-foreground">
+                  or use a one-time game code
+                </p>
+              </>
+            )}
             <Field label="Username">
               <Input name="username" autoComplete="username" required placeholder="Your handle" />
             </Field>
-            <Field label="Password">
-              <Input name="password" type="password" autoComplete="current-password" required />
+            <Field label="Game code or password">
+              <Input name="password" type="password" autoComplete="one-time-code" required />
             </Field>
 
             <Button type="submit" disabled={login.isPending} className="w-full">
@@ -161,7 +200,7 @@ function LoginPage() {
         </form>
 
         <p className="mt-4 text-center text-xs text-muted-foreground">
-          Guides and up only. Every action is written to the audit log.
+          Moderators and up only. Every action is written to the audit log.
         </p>
       </div>
     </div>
