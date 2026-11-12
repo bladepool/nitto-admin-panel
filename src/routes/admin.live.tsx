@@ -24,12 +24,12 @@ import { api, integer, relativeLabel, roleName } from "@/lib/admin-api";
 export const Route = createFileRoute("/admin/live")({
   head: () => ({
     meta: [
-      { title: "Live ops — 1320 Legends Race Control" },
+      { title: "Live ops — Racing Legends Race Control" },
       {
         name: "description",
         content: "See who is online, message rooms and broadcast to the server.",
       },
-      { property: "og:title", content: "Live ops — 1320 Legends Race Control" },
+      { property: "og:title", content: "Live ops — Racing Legends Race Control" },
       { property: "og:description", content: "See who is online and broadcast to the server." },
     ],
   }),

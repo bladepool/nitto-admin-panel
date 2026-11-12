@@ -41,12 +41,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/admin/badges")({
   head: () => ({
     meta: [
-      { title: "Badges — 1320 Legends Race Control" },
+      { title: "Badges — Racing Legends Race Control" },
       {
         name: "description",
         content: "Badge definitions, auto-award rules, and staff grants and revokes.",
       },
-      { property: "og:title", content: "Badges — 1320 Legends Race Control" },
+      { property: "og:title", content: "Badges — Racing Legends Race Control" },
       { property: "og:description", content: "Badge definitions and staff grants." },
     ],
   }),

@@ -34,12 +34,12 @@ import {
 export const Route = createFileRoute("/admin/accounts")({
   head: () => ({
     meta: [
-      { title: "Accounts — 1320 Legends Race Control" },
+      { title: "Accounts — Racing Legends Race Control" },
       {
         name: "description",
         content: "Search racers, adjust balances, and manage bans and roles.",
       },
-      { property: "og:title", content: "Accounts — 1320 Legends Race Control" },
+      { property: "og:title", content: "Accounts — Racing Legends Race Control" },
       { property: "og:description", content: "Search racers and manage their account state." },
     ],
   }),

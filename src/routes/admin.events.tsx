@@ -41,13 +41,13 @@ import {
 export const Route = createFileRoute("/admin/events")({
   head: () => ({
     meta: [
-      { title: "Events — 1320 Legends Race Control" },
+      { title: "Events — Racing Legends Race Control" },
       {
         name: "description",
         content:
           "Award event prizes, complete events, settle prize tables and track trophy supply.",
       },
-      { property: "og:title", content: "Events — 1320 Legends Race Control" },
+      { property: "og:title", content: "Events — Racing Legends Race Control" },
       { property: "og:description", content: "Award event prizes and track trophy supply." },
     ],
   }),

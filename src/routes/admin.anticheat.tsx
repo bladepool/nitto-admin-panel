@@ -32,12 +32,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/admin/anticheat")({
   head: () => ({
     meta: [
-      { title: "Anti-Cheat — 1320 Legends Race Control" },
+      { title: "Anti-Cheat — Racing Legends Race Control" },
       {
         name: "description",
         content: "Plausibility thresholds, enforcement policy and Ichiban's detection review.",
       },
-      { property: "og:title", content: "Anti-Cheat — 1320 Legends Race Control" },
+      { property: "og:title", content: "Anti-Cheat — Racing Legends Race Control" },
       {
         property: "og:description",
         content: "Plausibility thresholds, enforcement policy and Ichiban's detection review.",

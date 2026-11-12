@@ -20,6 +20,8 @@ import { Route as AdminBadgesRouteImport } from './routes/admin.badges'
 import { Route as AdminDiscordRouteImport } from './routes/admin.discord'
 import { Route as AdminEconomyRouteImport } from './routes/admin.economy'
 import { Route as AdminEventsRouteImport } from './routes/admin.events'
+import { Route as AdminInvitesRouteImport } from './routes/admin.invites'
+import { Route as AdminKnowledgeRouteImport } from './routes/admin.knowledge'
 import { Route as AdminLiveRouteImport } from './routes/admin.live'
 import { Route as AdminMigrationsRouteImport } from './routes/admin.migrations'
 import { Route as AdminObservabilityRouteImport } from './routes/admin.observability'
@@ -84,6 +86,16 @@ const AdminEventsRoute = AdminEventsRouteImport.update({
   path: '/events',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminInvitesRoute = AdminInvitesRouteImport.update({
+  id: '/invites',
+  path: '/invites',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminKnowledgeRoute = AdminKnowledgeRouteImport.update({
+  id: '/knowledge',
+  path: '/knowledge',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLiveRoute = AdminLiveRouteImport.update({
   id: '/live',
   path: '/live',
@@ -136,6 +148,8 @@ export interface FileRoutesByFullPath {
   '/admin/discord': typeof AdminDiscordRoute
   '/admin/economy': typeof AdminEconomyRoute
   '/admin/events': typeof AdminEventsRoute
+  '/admin/invites': typeof AdminInvitesRoute
+  '/admin/knowledge': typeof AdminKnowledgeRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/migrations': typeof AdminMigrationsRoute
   '/admin/observability': typeof AdminObservabilityRoute
@@ -156,6 +170,8 @@ export interface FileRoutesByTo {
   '/admin/discord': typeof AdminDiscordRoute
   '/admin/economy': typeof AdminEconomyRoute
   '/admin/events': typeof AdminEventsRoute
+  '/admin/invites': typeof AdminInvitesRoute
+  '/admin/knowledge': typeof AdminKnowledgeRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/migrations': typeof AdminMigrationsRoute
   '/admin/observability': typeof AdminObservabilityRoute
@@ -178,6 +194,8 @@ export interface FileRoutesById {
   '/admin/discord': typeof AdminDiscordRoute
   '/admin/economy': typeof AdminEconomyRoute
   '/admin/events': typeof AdminEventsRoute
+  '/admin/invites': typeof AdminInvitesRoute
+  '/admin/knowledge': typeof AdminKnowledgeRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/migrations': typeof AdminMigrationsRoute
   '/admin/observability': typeof AdminObservabilityRoute
@@ -201,6 +219,8 @@ export interface FileRouteTypes {
     | '/admin/discord'
     | '/admin/economy'
     | '/admin/events'
+    | '/admin/invites'
+    | '/admin/knowledge'
     | '/admin/live'
     | '/admin/migrations'
     | '/admin/observability'
@@ -221,6 +241,8 @@ export interface FileRouteTypes {
     | '/admin/discord'
     | '/admin/economy'
     | '/admin/events'
+    | '/admin/invites'
+    | '/admin/knowledge'
     | '/admin/live'
     | '/admin/migrations'
     | '/admin/observability'
@@ -242,6 +264,8 @@ export interface FileRouteTypes {
     | '/admin/discord'
     | '/admin/economy'
     | '/admin/events'
+    | '/admin/invites'
+    | '/admin/knowledge'
     | '/admin/live'
     | '/admin/migrations'
     | '/admin/observability'
@@ -339,6 +363,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEventsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/invites': {
+      id: '/admin/invites'
+      path: '/invites'
+      fullPath: '/admin/invites'
+      preLoaderRoute: typeof AdminInvitesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/knowledge': {
+      id: '/admin/knowledge'
+      path: '/knowledge'
+      fullPath: '/admin/knowledge'
+      preLoaderRoute: typeof AdminKnowledgeRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/live': {
       id: '/admin/live'
       path: '/live'
@@ -407,6 +445,8 @@ interface AdminRouteChildren {
   AdminDiscordRoute: typeof AdminDiscordRoute
   AdminEconomyRoute: typeof AdminEconomyRoute
   AdminEventsRoute: typeof AdminEventsRoute
+  AdminInvitesRoute: typeof AdminInvitesRoute
+  AdminKnowledgeRoute: typeof AdminKnowledgeRoute
   AdminLiveRoute: typeof AdminLiveRoute
   AdminMigrationsRoute: typeof AdminMigrationsRoute
   AdminObservabilityRoute: typeof AdminObservabilityRoute
@@ -425,6 +465,8 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminDiscordRoute: AdminDiscordRoute,
   AdminEconomyRoute: AdminEconomyRoute,
   AdminEventsRoute: AdminEventsRoute,
+  AdminInvitesRoute: AdminInvitesRoute,
+  AdminKnowledgeRoute: AdminKnowledgeRoute,
   AdminLiveRoute: AdminLiveRoute,
   AdminMigrationsRoute: AdminMigrationsRoute,
   AdminObservabilityRoute: AdminObservabilityRoute,

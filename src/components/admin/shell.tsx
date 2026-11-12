@@ -4,6 +4,7 @@ import {
   Activity,
   Award,
   BadgeCheck,
+  BookOpen,
   CarFront,
   Coins,
   Crosshair,
@@ -12,6 +13,7 @@ import {
   LogOut,
   MessagesSquare,
   Radio,
+  Send,
   ShieldAlert,
   Ticket,
   Trophy,
@@ -23,7 +25,10 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Pill } from "@/components/admin/primitives";
+import { Emblem } from "@/components/admin/brand";
+import { CopilotDock } from "@/components/admin/copilot-dock";
 import { api, isOwner, roleName, type AdminSession } from "@/lib/admin-api";
+import { CopilotProvider } from "@/lib/copilot";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -48,7 +53,9 @@ const NAV: NavItem[] = [
   { to: "/admin/approvals", label: "Approvals", hint: "Staff & actions", icon: BadgeCheck },
   { to: "/admin/anticheat", label: "Anti-Cheat", hint: "Thresholds & review", icon: Crosshair },
   { to: "/admin/discord", label: "Discord", hint: "Ichiban review queue", icon: MessagesSquare },
+  { to: "/admin/invites", label: "Discord Invites", hint: "Invites & mirror", icon: Send },
   { to: "/admin/security", label: "Security", hint: "Cases & flags", icon: ShieldAlert },
+  { to: "/admin/knowledge", label: "Ichiban Knowledge", hint: "Q&A & unanswered", icon: BookOpen },
   {
     to: "/admin/observability",
     label: "Observability",
@@ -84,18 +91,16 @@ export function AdminShell({
   }
 
   return (
+    <CopilotProvider>
     <div className="carbon-grid min-h-screen">
       <div className="relative z-10 flex min-h-screen flex-col lg:flex-row">
         <aside className="border-b border-sidebar-border bg-sidebar/90 backdrop-blur lg:w-64 lg:shrink-0 lg:border-r lg:border-b-0">
-          <div className="flex items-center gap-3 px-5 py-5">
-            <img
-              src="/brand/1320-legends-logo.png"
-              alt="1320 Legends"
-              className="size-9 shrink-0 object-contain"
-            />
-            <div>
-              <p className="font-display text-sm font-bold tracking-wide">1320 LEGENDS</p>
-              <p className="label-eyebrow">Race control</p>
+          <div className="flex items-center gap-3 px-5 py-5" aria-label="Racing Legends Race Control">
+            <Emblem className="size-10 shrink-0" />
+            <div className="leading-none">
+              <p className="font-display text-[0.8125rem] font-bold tracking-[0.32em] text-chrome">RACING</p>
+              <p className="font-wordmark text-xl font-extrabold italic tracking-[0.04em] text-primary">LEGENDS</p>
+              <p className="mt-1 font-mono text-[0.59rem] tracking-[0.16em] text-muted-foreground">RACE CONTROL</p>
             </div>
           </div>
 
@@ -133,7 +138,9 @@ export function AdminShell({
             <div className="flex flex-wrap items-center gap-2">
               {session ? (
                 <>
-                  <Pill tone={owner ? "primary" : "warning"}>{roleName(session.roleClass)}</Pill>
+                  <span className="rounded-md border border-[#6b1d18] bg-[#2a0f0d] px-2 py-0.5 font-display text-[0.6875rem] font-semibold tracking-[0.2em] text-[#ffb4ae] uppercase">
+                    {roleName(session.roleClass)}
+                  </span>
                   <span className="numeric text-sm text-muted-foreground">
                     {session.username} #{session.accountId}
                   </span>
@@ -155,7 +162,9 @@ export function AdminShell({
           <main className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-5 sm:px-6">{children}</main>
         </div>
       </div>
+      {session && <CopilotDock role={Number(session.roleClass ?? 0)} />}
     </div>
+    </CopilotProvider>
   );
 }
 
@@ -171,7 +180,7 @@ export function PageHeading({
   return (
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+        <h1 className="font-display text-[1.75rem] leading-none font-semibold tracking-[0.04em] uppercase">{title}</h1>
         {subtitle && <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
       </div>
       {actions && <div className="flex flex-wrap gap-2">{actions}</div>}

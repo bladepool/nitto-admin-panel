@@ -22,10 +22,10 @@ import { api, dateLabel, integer, money } from "@/lib/admin-api";
 export const Route = createFileRoute("/admin/economy")({
   head: () => ({
     meta: [
-      { title: "Economy — 1320 Legends Race Control" },
+      { title: "Economy — Racing Legends Race Control" },
       { name: "description", content: "Redeem codes, point packages and store economy tools." },
-      { property: "og:title", content: "Economy — 1320 Legends Race Control" },
-      { property: "og:description", content: "Redeem codes and point packages for 1320 Legends." },
+      { property: "og:title", content: "Economy — Racing Legends Race Control" },
+      { property: "og:description", content: "Redeem codes and point packages for Racing Legends." },
     ],
   }),
   component: EconomyPage,

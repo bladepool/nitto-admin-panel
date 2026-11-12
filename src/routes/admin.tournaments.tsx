@@ -33,16 +33,17 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { api, buildQuery, dateLabel, integer, money, unixLabel } from "@/lib/admin-api";
+import { AskIchiban } from "@/lib/copilot";
 
 export const Route = createFileRoute("/admin/tournaments")({
   head: () => ({
     meta: [
-      { title: "Tournaments — 1320 Legends Race Control" },
+      { title: "Tournaments — Racing Legends Race Control" },
       {
         name: "description",
         content: "Weekly live-tournament schedule, generated events, brackets and the simulator.",
       },
-      { property: "og:title", content: "Tournaments — 1320 Legends Race Control" },
+      { property: "og:title", content: "Tournaments — Racing Legends Race Control" },
       { property: "og:description", content: "Weekly live-tournament schedule and events." },
     ],
   }),
@@ -320,6 +321,7 @@ function ScheduleTab({
               <Cell>
                 <div className="font-medium">{slot.name}</div>
                 <div className="numeric text-xs text-muted-foreground">#{slot.id}</div>
+                <AskIchiban className="mt-1.5" select={{ type: "tournamentSlot", id: slot.id, label: `Slot #${slot.id}: ${slot.name}` }} />
               </Cell>
               <Cell>
                 <Pill tone={kindTone(slot.kind)}>{slot.kind}</Pill>
@@ -890,6 +892,7 @@ function EventsTab() {
                 <div className="numeric text-xs text-muted-foreground">
                   #{item.id} · slot {item.scheduleId} · {item.createdBy}
                 </div>
+                <AskIchiban className="mt-1.5" select={{ type: "tournamentEvent", id: item.id, label: `Event #${item.id}: ${item.name}` }} />
               </Cell>
               <Cell>
                 <Pill tone={kindTone(item.kind)}>{item.kind}</Pill>

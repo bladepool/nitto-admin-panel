@@ -1,5 +1,5 @@
 /*
- * Thin client for the existing 1320 Legends admin HTTP API.
+ * Thin client for the existing Racing Legends admin HTTP API.
  *
  * Auth rides the existing HttpOnly session cookie, so every request is a
  * plain same-origin fetch with credentials. Nothing here is a security

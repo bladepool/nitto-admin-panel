@@ -1,27 +1,28 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Loader2, ShieldCheck } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, Pill } from "@/components/admin/primitives";
+import { Lockup } from "@/components/admin/brand";
 import { api, sessionUsable, type AdminSession } from "@/lib/admin-api";
 import { useAdminSession } from "@/lib/use-admin-session";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Staff sign in — 1320 Legends Race Control" },
+      { title: "Staff sign in — Racing Legends Race Control" },
       {
         name: "description",
         content:
-          "Sign in to the 1320 Legends staff console to manage racers, events and approvals.",
+          "Sign in to the Racing Legends staff console to manage racers, events and approvals.",
       },
-      { property: "og:title", content: "Staff sign in — 1320 Legends Race Control" },
+      { property: "og:title", content: "Staff sign in — Racing Legends Race Control" },
       {
         property: "og:description",
-        content: "Sign in to the 1320 Legends staff console.",
+        content: "Sign in to the Racing Legends staff console.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],
@@ -102,22 +103,19 @@ function LoginPage() {
   });
 
   return (
-    <div className="carbon-grid flex min-h-screen items-center justify-center px-4 py-10">
-      <div className="relative z-10 w-full max-w-sm">
-        <div className="mb-6 flex items-center gap-3">
-          <img
-            src="/brand/1320-legends-logo.png"
-            alt="1320 Legends"
-            className="size-11 shrink-0 object-contain"
-          />
-          <div>
-            <h1 className="font-display text-lg font-bold tracking-wide">1320 LEGENDS</h1>
-            <p className="label-eyebrow">Race control — staff only</p>
-          </div>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[radial-gradient(120%_70%_at_50%_-10%,rgb(255_59_47/0.22),transparent_60%)] px-4 pt-10 pb-16">
+      <div aria-hidden className="checkered-strip pointer-events-none absolute inset-x-0 bottom-0 h-3.5 opacity-55" />
+      <div className="relative z-10 grid w-full max-w-[380px] gap-[22px]">
+        <div className="grid justify-items-center gap-2.5 text-center">
+          <h1 className="sr-only">Racing Legends Race Control</h1>
+          <Lockup className="h-auto w-full max-w-[320px]" />
+          <p className="font-display text-xs font-semibold tracking-[0.32em] text-muted-foreground uppercase">
+            <span className="text-primary">Race Control</span> · Staff only
+          </p>
         </div>
 
         <form
-          className="rounded-xl border border-border bg-card p-5 shadow-panel"
+          className="rounded-xl border border-border bg-gradient-to-b from-card to-[#12161c] p-5 shadow-panel"
           onSubmit={(event) => {
             event.preventDefault();
             const form = event.currentTarget;
@@ -129,39 +127,42 @@ function LoginPage() {
             });
           }}
         >
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3.5">
             {discordEnabled && (
               <>
                 <Button
                   type="button"
-                  className="w-full bg-[#5865F2] text-white hover:bg-[#4752C4]"
+                  className="h-11 w-full bg-[#5865F2] text-[0.9375rem] font-semibold text-white hover:bg-[#4752C4]"
                   onClick={() => {
                     setStatus({ text: "Opening Discord…", tone: "" });
                     window.location.assign("/api/admin/auth/discord/start");
                   }}
                 >
+                  <svg viewBox="0 0 24 24" aria-hidden className="size-5">
+                    <path fill="#fff" d="M19.6 5.4A16.6 16.6 0 0 0 15.5 4l-.5 1a15.3 15.3 0 0 0-6 0l-.5-1a16.6 16.6 0 0 0-4.1 1.4C1.8 9.3 1.1 13.1 1.4 16.9a16.8 16.8 0 0 0 5 2.6l1.1-1.7a10.8 10.8 0 0 1-1.7-.8l.4-.3a11.9 11.9 0 0 0 11.6 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.7a16.7 16.7 0 0 0 5-2.6c.4-4.4-.7-8.2-3-11.5ZM8.7 14.6c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z" />
+                  </svg>
                   Sign in with Discord
                 </Button>
-                <p className="text-center text-xs text-muted-foreground">
+                <p className="grid grid-cols-[1fr_auto_1fr] items-center gap-2.5 text-xs text-muted-foreground before:h-px before:bg-border before:content-[''] after:h-px after:bg-border after:content-['']">
                   or use a one-time game code
                 </p>
               </>
             )}
-            <Field label="Username">
-              <Input name="username" autoComplete="username" required placeholder="Your handle" />
+            <Field label="Racer name">
+              <Input name="username" autoComplete="username" required placeholder="Your handle" className="h-[42px] bg-[#0b0e12] text-[0.9375rem]" />
             </Field>
-            <Field label="Game code or password">
-              <Input name="password" type="password" autoComplete="one-time-code" required />
+            <Field label="Game code">
+              <Input name="password" type="password" autoComplete="one-time-code" required placeholder="8-character code from /code" className="h-[42px] bg-[#0b0e12] text-[0.9375rem]" />
             </Field>
 
-            <Button type="submit" disabled={login.isPending} className="w-full">
-              {login.isPending ? (
-                <Loader2 className="size-4 animate-spin" aria-hidden />
-              ) : (
-                <ShieldCheck className="size-4" aria-hidden />
-              )}
+            <button
+              type="submit"
+              disabled={login.isPending}
+              className="btn-chrome-red inline-flex h-[46px] w-full items-center justify-center gap-2 rounded-lg text-xl disabled:opacity-70"
+            >
+              {login.isPending && <Loader2 className="size-5 animate-spin" aria-hidden />}
               {login.isPending ? "Checking access" : "Enter race control"}
-            </Button>
+            </button>
 
             {status.text && (
               <p
@@ -199,8 +200,8 @@ function LoginPage() {
           </div>
         </form>
 
-        <p className="mt-4 text-center text-xs text-muted-foreground">
-          Moderators and up only. Every action is written to the audit log.
+        <p className="text-center text-xs text-muted-foreground">
+          <b className="font-semibold text-foreground">Moderators and up.</b> Every action is written to the audit log.
         </p>
       </div>
     </div>

@@ -24,12 +24,12 @@ import { api, buildQuery, dateLabel, integer } from "@/lib/admin-api";
 export const Route = createFileRoute("/admin/access")({
   head: () => ({
     meta: [
-      { title: "Access Codes — 1320 Legends Race Control" },
+      { title: "Access Codes — Racing Legends Race Control" },
       {
         name: "description",
         content: "Generate invite codes and track which have been claimed and accepted the terms.",
       },
-      { property: "og:title", content: "Access Codes — 1320 Legends Race Control" },
+      { property: "og:title", content: "Access Codes — Racing Legends Race Control" },
       {
         property: "og:description",
         content: "Generate invite codes and track claims and terms acceptance.",

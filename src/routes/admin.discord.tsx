@@ -21,16 +21,17 @@ import { ConfirmButton, GameApiCredential } from "@/components/admin/game-api";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api, dateLabel } from "@/lib/admin-api";
+import { AskIchiban } from "@/lib/copilot";
 
 export const Route = createFileRoute("/admin/discord")({
   head: () => ({
     meta: [
-      { title: "Discord Moderation — 1320 Legends Race Control" },
+      { title: "Discord Moderation — Racing Legends Race Control" },
       {
         name: "description",
         content: "Ichiban's Discord cases waiting for staff: approve to run the Discord action, or dismiss.",
       },
-      { property: "og:title", content: "Discord Moderation — 1320 Legends Race Control" },
+      { property: "og:title", content: "Discord Moderation — Racing Legends Race Control" },
       { property: "og:description", content: "Staff review queue for Ichiban on the Racing Legends Discord." },
     ],
   }),
@@ -176,6 +177,7 @@ function DiscordPage() {
                         <div className="font-medium">{c.discordUsername ?? c.discordUserId}</div>
                         <div className="font-mono text-xs text-muted-foreground">{c.discordUserId}</div>
                         {c.racer && <div className="mt-0.5 text-xs text-muted-foreground">racer {c.racer}</div>}
+                        <AskIchiban className="mt-1.5" select={{ type: "discordCase", id: c.id, label: `Discord case #${c.id}: ${c.discordUsername ?? c.discordUserId}` }} />
                       </Cell>
                       <Cell className="max-w-[22rem] text-xs">
                         {c.messageText ? <div className="whitespace-pre-wrap break-words">{c.messageText}</div> : <span className="text-muted-foreground">(no message)</span>}

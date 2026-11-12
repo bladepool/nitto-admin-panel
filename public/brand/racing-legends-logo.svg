@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 468 104" width="468" height="104" role="img" aria-label="Racing Legends">
+  <defs>
+    <linearGradient id="rl-chrome" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".34" stop-color="#c6d0da"/>
+      <stop offset=".5" stop-color="#7f8a96"/>
+      <stop offset=".53" stop-color="#565f6a"/>
+      <stop offset=".72" stop-color="#b4bec8"/>
+      <stop offset="1" stop-color="#eef3f8"/>
+    </linearGradient>
+    <linearGradient id="rl-red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff8585"/>
+      <stop offset=".46" stop-color="#e01b1b"/>
+      <stop offset=".54" stop-color="#9f0000"/>
+      <stop offset="1" stop-color="#ff5151"/>
+    </linearGradient>
+    <path id="rl-ring" d="M52 52 m-35 0 a35 35 0 1 1 70 0 a35 35 0 1 1 -70 0"/>
+  </defs>
+
+  <!-- emblem -->
+  <circle cx="52" cy="52" r="49" fill="#0e1218" stroke="url(#rl-chrome)" stroke-width="3"/>
+  <circle cx="52" cy="52" r="29" fill="#121722" stroke="url(#rl-red)" stroke-width="3"/>
+  <g fill="#eef2f7">
+    <rect x="35.5" y="27" width="5.6" height="5.6"/>
+    <rect x="46.7" y="27" width="5.6" height="5.6"/>
+    <rect x="57.9" y="27" width="5.6" height="5.6"/>
+    <rect x="41.1" y="32.6" width="5.6" height="5.6"/>
+    <rect x="52.3" y="32.6" width="5.6" height="5.6"/>
+  </g>
+  <text x="52" y="71" text-anchor="middle" font-family="'Saira Condensed','Arial Narrow',sans-serif" font-weight="800" font-style="italic" font-size="36" fill="url(#rl-chrome)">RL</text>
+  <text font-family="'Oswald','Arial Narrow',sans-serif" font-weight="600" font-size="9.4" letter-spacing="2.3" fill="#aeb8c4">
+    <textPath href="#rl-ring" startOffset="2%">RACING&#160;LEGENDS&#160;&#183;&#160;EST&#160;2026&#160;&#183;&#160;</textPath>
+  </text>
+
+  <!-- wordmark -->
+  <text x="124" y="45" font-family="'Oswald','Arial Narrow',sans-serif" font-weight="700" font-size="21" letter-spacing="9.5" fill="url(#rl-chrome)">RACING</text>
+  <rect x="126" y="53" width="214" height="3" fill="url(#rl-red)"/>
+  <text x="122" y="92" font-family="'Saira Condensed','Arial Narrow',sans-serif" font-weight="800" font-style="italic" font-size="44" letter-spacing="1" fill="url(#rl-red)" stroke="#f0f4f8" stroke-width=".4">LEGENDS</text>
+</svg>

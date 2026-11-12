@@ -23,12 +23,12 @@ import { useAdminSession } from "@/lib/use-admin-session";
 export const Route = createFileRoute("/admin/approvals")({
   head: () => ({
     meta: [
-      { title: "Approvals — 1320 Legends Race Control" },
+      { title: "Approvals — Racing Legends Race Control" },
       {
         name: "description",
         content: "Approve staff access requests and review queued staff actions.",
       },
-      { property: "og:title", content: "Approvals — 1320 Legends Race Control" },
+      { property: "og:title", content: "Approvals — Racing Legends Race Control" },
       { property: "og:description", content: "Approve staff access and queued staff actions." },
     ],
   }),

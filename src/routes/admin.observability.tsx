@@ -23,12 +23,12 @@ import { useAdminSession } from "@/lib/use-admin-session";
 export const Route = createFileRoute("/admin/observability")({
   head: () => ({
     meta: [
-      { title: "Observability — 1320 Legends Race Control" },
+      { title: "Observability — Racing Legends Race Control" },
       {
         name: "description",
         content: "Live event tail, runtime metrics and alerts for the game server.",
       },
-      { property: "og:title", content: "Observability — 1320 Legends Race Control" },
+      { property: "og:title", content: "Observability — Racing Legends Race Control" },
       {
         property: "og:description",
         content: "Live event tail and runtime metrics for the game server.",

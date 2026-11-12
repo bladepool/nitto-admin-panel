@@ -5,9 +5,11 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * 1320 Legends — Race Control design system.
- * Carbon + ignition-orange. Single dark theme; no light mode.
- * All colors are oklch tokens. Never hardcode colors in components.
+ * Racing Legends — Race Control design system (the racinglegends.app brand: chrome + red on carbon).
+ * Palette: carbon #0d0f13 · panel #161a21 · line #2a303b · text #e8ebf0 · muted #8a93a3 · red #ff3b2f · go #39d353.
+ * Type: Oswald (labels / headings, letter-spaced caps) · Saira Condensed italic 800 (big numbers, the
+ * LEGENDS wordmark, the primary call to action) · Inter (body) · JetBrains Mono (data).
+ * Single dark theme; no light mode. Never hardcode colors in components: use the tokens below.
  */
 
 @theme inline {
@@ -19,12 +21,13 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
 
-  /* Match the real game's own brand fonts (site/assets/*.css --font-heading / --font-ui /
-     --font-telemetry): condensed display face, Inter for UI body copy, a mono face for
-     telemetry-style numbers/labels. */
-  --font-display: "Arial Narrow", "Roboto Condensed", Impact, Haettenschweiler, sans-serif;
+  /* The Racing Legends website's type (apps/web): Oswald display, Saira Condensed italic wordmark,
+     Inter body, JetBrains Mono for telemetry-style numbers/labels. */
+  --font-display: "Oswald", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
+  --font-wordmark: "Saira Condensed", "Arial Narrow", Impact, sans-serif;
   --font-sans: Inter, "Segoe UI", Arial, sans-serif;
-  --font-mono: "Cascadia Mono", "Roboto Mono", Consolas, "Courier New", monospace;
+  --font-mono: "JetBrains Mono", "Cascadia Mono", Consolas, "Courier New", monospace;
+  --color-chrome: var(--chrome);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -69,70 +72,70 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --shadow-panel: 0 24px 64px oklch(0 0 0 / 0.5);
-  --shadow-ignite: 0 0 0 1px oklch(0.685 0.196 39 / 0.4), 0 18px 40px oklch(0.685 0.196 39 / 0.22);
+  --shadow-panel: 0 20px 60px rgb(0 0 0 / 0.45);
+  --shadow-ignite: 0 0 0 1px rgb(255 59 47 / 0.4), 0 18px 40px rgb(255 59 47 / 0.22);
 }
 
 :root {
   --radius: 0.5rem;
 
-  /* Base darkened to match the real game's near-black brand (--black:#030100 /
-     --black-2:#090403 in site/assets/*.css) -- the previous L=0.155 background read as a
-     mid charcoal brown rather than the near-black the real admin console/site use. */
-  --background: oklch(0.085 0.012 40);
-  --foreground: oklch(0.962 0.012 70);
+  /* Racing Legends carbon (apps/web): near-black carbon, panel greys, chrome text, signal red. */
+  --background: #0d0f13;
+  --foreground: #e8ebf0;
 
-  --surface: oklch(0.12 0.015 38);
-  --surface-raised: oklch(0.16 0.018 38);
+  --surface: #161a21;
+  --surface-raised: #1c212a;
 
-  --card: oklch(0.12 0.015 38);
-  --card-foreground: oklch(0.962 0.012 70);
-  --popover: oklch(0.135 0.017 38);
-  --popover-foreground: oklch(0.962 0.012 70);
+  --card: #161a21;
+  --card-foreground: #e8ebf0;
+  --popover: #1a1f27;
+  --popover-foreground: #e8ebf0;
 
-  --primary: oklch(0.685 0.196 39);
-  --primary-foreground: oklch(0.16 0.02 40);
+  --primary: #ff3b2f;
+  --primary-foreground: #ffffff;
 
-  --secondary: oklch(0.17 0.018 38);
-  --secondary-foreground: oklch(0.94 0.014 70);
+  --secondary: #1c212a;
+  --secondary-foreground: #e8ebf0;
 
-  --muted: oklch(0.15 0.013 40);
-  --muted-foreground: oklch(0.705 0.026 58);
+  --muted: #1a1f27;
+  --muted-foreground: #8a93a3;
 
-  --accent: oklch(0.815 0.126 72);
-  --accent-foreground: oklch(0.17 0.02 45);
+  --accent: #c6d0da;
+  --accent-foreground: #0d0f13;
 
-  --destructive: oklch(0.638 0.204 24);
-  --destructive-foreground: oklch(0.98 0.01 60);
+  --destructive: #e5484d;
+  --destructive-foreground: #ffffff;
 
-  --success: oklch(0.735 0.164 148);
-  --success-foreground: oklch(0.17 0.02 150);
+  --success: #39d353;
+  --success-foreground: #06210c;
 
-  --warning: oklch(0.805 0.132 78);
-  --warning-foreground: oklch(0.18 0.02 70);
+  --warning: #f5b544;
+  --warning-foreground: #241703;
 
-  --info: oklch(0.745 0.108 232);
-  --info-foreground: oklch(0.17 0.02 232);
+  --info: #6ea8ff;
+  --info-foreground: #06142b;
 
-  --border: oklch(0.22 0.018 38);
-  --border-strong: oklch(0.38 0.06 40);
-  --input: oklch(0.2 0.018 38);
-  --ring: oklch(0.685 0.196 39);
+  --border: #2a303b;
+  --border-strong: #3d4552;
+  --input: #2a303b;
+  --ring: #ff3b2f;
 
-  --chart-1: oklch(0.685 0.196 39);
-  --chart-2: oklch(0.815 0.126 72);
-  --chart-3: oklch(0.735 0.164 148);
-  --chart-4: oklch(0.745 0.108 232);
-  --chart-5: oklch(0.638 0.204 24);
+  --chrome: #c6d0da;
 
-  --sidebar: oklch(0.075 0.012 38);
-  --sidebar-foreground: oklch(0.9 0.014 70);
-  --sidebar-primary: oklch(0.685 0.196 39);
-  --sidebar-primary-foreground: oklch(0.16 0.02 40);
-  --sidebar-accent: oklch(0.16 0.019 38);
-  --sidebar-accent-foreground: oklch(0.962 0.012 70);
-  --sidebar-border: oklch(0.2 0.018 38);
-  --sidebar-ring: oklch(0.685 0.196 39);
+  --chart-1: #ff3b2f;
+  --chart-2: #c6d0da;
+  --chart-3: #39d353;
+  --chart-4: #6ea8ff;
+  --chart-5: #f5b544;
+
+  --sidebar: #0a0c10;
+  --sidebar-foreground: #e8ebf0;
+  --sidebar-primary: #ff3b2f;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #161a21;
+  --sidebar-accent-foreground: #e8ebf0;
+  --sidebar-border: #2a303b;
+  --sidebar-ring: #ff3b2f;
 }
 
 @layer base {
@@ -147,9 +150,9 @@
   body {
     background-color: var(--color-background);
     background-image:
-      radial-gradient(circle at 12% -8%, oklch(0.685 0.196 39 / 0.16), transparent 46%),
-      radial-gradient(circle at 92% -4%, oklch(0.815 0.126 72 / 0.1), transparent 40%);
-    background-repeat: no-repeat;
+      radial-gradient(120% 60% at 50% -12%, rgb(255 59 47 / 0.14), transparent 60%),
+      repeating-linear-gradient(135deg, rgb(255 255 255 / 0.018) 0 2px, transparent 2px 6px);
+    background-repeat: no-repeat, repeat;
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -160,11 +163,11 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: 0.01em;
+    letter-spacing: 0.02em;
   }
 
   ::selection {
-    background: oklch(0.685 0.196 39 / 0.35);
+    background: rgb(255 59 47 / 0.35);
   }
 }
 
@@ -177,20 +180,43 @@
     inset: 0;
     pointer-events: none;
     background:
-      repeating-linear-gradient(90deg, oklch(1 0 0 / 0.02) 0 1px, transparent 1px 72px),
-      repeating-linear-gradient(0deg, oklch(1 0 0 / 0.016) 0 1px, transparent 1px 72px);
+      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.018) 0 1px, transparent 1px 72px),
+      repeating-linear-gradient(0deg, rgb(255 255 255 / 0.014) 0 1px, transparent 1px 72px);
     mix-blend-mode: screen;
     opacity: 0.5;
   }
 }
 
-/* Small uppercase label used across panels. */
+/* Small uppercase label used across panels (tile labels, table headers): Oswald, letter-spaced caps. */
 @utility label-eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
+  font-weight: 600;
   font-size: 0.6875rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-muted-foreground);
+}
+
+/* Big italic numbers (stat tiles) and the LEGENDS wordmark. */
+@utility font-wordmark {
+  font-family: var(--font-wordmark);
+}
+
+/* Red chrome call to action (the sign-in button), from the website. */
+@utility btn-chrome-red {
+  color: #fff;
+  font-family: var(--font-wordmark);
+  font-style: italic;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #ff6b5f 0%, #ff3b2f 45%, #c4110a 55%, #9f0000 100%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35);
+}
+
+/* Checkered finish strip (sign-in screen bottom edge). */
+@utility checkered-strip {
+  background: conic-gradient(#e8ebf0 25%, #0d0f13 0 50%, #e8ebf0 0 75%, #0d0f13 0) 0 0 / 14px 14px;
 }
 
 /* Tabular numerals for any metric or currency figure. */

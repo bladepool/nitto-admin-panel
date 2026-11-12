@@ -21,16 +21,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api, dateLabel } from "@/lib/admin-api";
+import { AskIchiban } from "@/lib/copilot";
 
 export const Route = createFileRoute("/admin/migrations")({
   head: () => ({
     meta: [
-      { title: "Garage Imports — 1320 Legends Race Control" },
+      { title: "Garage Imports — Racing Legends Race Control" },
       {
         name: "description",
         content: "Review rare cars from racers' one-time garage imports before they are granted.",
       },
-      { property: "og:title", content: "Garage Imports — 1320 Legends Race Control" },
+      { property: "og:title", content: "Garage Imports — Racing Legends Race Control" },
       { property: "og:description", content: "Staff review queue for garage imports." },
     ],
   }),
@@ -148,6 +149,7 @@ function MigrationsPage() {
                     <Cell>
                       <div className="flex flex-col gap-1.5">
                         <div className="flex gap-1.5">
+                          <AskIchiban select={{ type: "migrationReview", id: item.id, label: `Import #${item.id}: ${item.carName} for ${item.player}` }} />
                           <ConfirmButton
                             variant="default"
                             destructive={false}

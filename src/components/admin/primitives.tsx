@@ -114,9 +114,9 @@ export function StatTile({
   }[tone];
 
   return (
-    <div className="rounded-lg border border-border bg-surface/70 px-3.5 py-3">
+    <div className="rounded-[10px] border border-border bg-surface px-3.5 py-3">
       <Eyebrow>{label}</Eyebrow>
-      <div className={cn("numeric mt-1.5 text-xl font-semibold", valueTone)}>{value}</div>
+      <div className={cn("font-wordmark mt-1.5 text-[1.75rem] leading-[1.1] font-extrabold italic tabular-nums", valueTone)}>{value}</div>
       {hint && <div className="mt-0.5 text-xs text-muted-foreground">{hint}</div>}
     </div>
   );
@@ -191,7 +191,7 @@ export function DataTable({ head, children }: { head: ReactNode[]; children: Rea
             {head.map((cell, index) => (
               <th
                 key={index}
-                className="label-eyebrow border-b border-border px-2.5 py-2 text-left font-semibold"
+                className="label-eyebrow border-b border-border bg-[#11151b] px-2.5 py-2.5 text-left font-semibold"
               >
                 {cell}
               </th>

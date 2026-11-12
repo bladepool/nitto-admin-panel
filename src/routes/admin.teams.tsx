@@ -21,12 +21,12 @@ import { api, dateLabel, integer, roleName } from "@/lib/admin-api";
 export const Route = createFileRoute("/admin/teams")({
   head: () => ({
     meta: [
-      { title: "Teams — 1320 Legends Race Control" },
+      { title: "Teams — Racing Legends Race Control" },
       {
         name: "description",
         content: "Search teams and inspect rosters, owners and member counts.",
       },
-      { property: "og:title", content: "Teams — 1320 Legends Race Control" },
+      { property: "og:title", content: "Teams — Racing Legends Race Control" },
       { property: "og:description", content: "Search teams and inspect their rosters." },
     ],
   }),

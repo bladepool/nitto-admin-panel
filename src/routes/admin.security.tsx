@@ -23,12 +23,12 @@ import { api, buildQuery, dateLabel, integer } from "@/lib/admin-api";
 export const Route = createFileRoute("/admin/security")({
   head: () => ({
     meta: [
-      { title: "Security — 1320 Legends Race Control" },
+      { title: "Security — Racing Legends Race Control" },
       {
         name: "description",
         content: "Flagged accounts, moderation cases and the staff audit trail.",
       },
-      { property: "og:title", content: "Security — 1320 Legends Race Control" },
+      { property: "og:title", content: "Security — Racing Legends Race Control" },
       { property: "og:description", content: "Flagged accounts, cases and the staff audit trail." },
     ],
   }),
