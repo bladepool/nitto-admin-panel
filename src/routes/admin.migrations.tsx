@@ -41,8 +41,13 @@ export const Route = createFileRoute("/admin/migrations")({
 
 type ReviewItem = {
   id: number;
-  /** "car" (rare car) or "money" (money from the source server, credited only on approval). */
-  kind?: "car" | "money";
+  /**
+   * "car" (rare car), "money" (money from the source server, credited only on approval) or "part" (a limited /
+   * prize rim or part of an imported car: granted through the award service on approval, the car is already in).
+   */
+  kind?: "car" | "money" | "part";
+  /** kind "part": the prize part, its car and the ordinary part the car has meanwhile. */
+  part?: { partId: number; name: string; carName: string; interim: string | null } | null;
   amount?: number | null;
   note?: string | null;
   engine?: string | null;
@@ -99,6 +104,7 @@ function MigrationsPage() {
       reason?: string;
       amount?: number;
       money?: boolean;
+      part?: boolean;
     }) =>
       api(`/api/admin/migrations/review/${id}/${verb}`, {
         method: "POST",
@@ -110,7 +116,9 @@ function MigrationsPage() {
           ? "Denied."
           : variables.money
             ? `Approved: ${(variables.amount ?? 0).toLocaleString()} money credited through the ledger.`
-            : "Approved: the car was granted.",
+            : variables.part
+              ? "Approved: the part was granted."
+              : "Approved: the car was granted.",
       );
       queryClient.invalidateQueries({ queryKey: gameKey() });
     },
@@ -124,7 +132,7 @@ function MigrationsPage() {
     <>
       <PageHeading
         title="Migrations"
-        subtitle="Rare cars from one-time migrations (trophy, award-only, limited, dev or unverified catalogue matches) and money racers declared from the other server wait here. Cars are granted through the award service, so supply caps hold. Money is credited through the economy ledger, once, by an admin; you may credit less than declared, never more."
+        subtitle="Rare cars from one-time migrations (trophy, award-only, limited, dev or unverified catalogue matches), limited or prize parts (the car is already imported) and money racers declared from the other server wait here. Cars and parts are granted through the award service, so supply caps hold. Money is credited through the economy ledger, once, by an admin; you may credit less than declared, never more."
       />
 
       <GameApiCredential />
@@ -149,6 +157,7 @@ function MigrationsPage() {
               >
                 {queue.map((item) => {
                   const isMoney = item.kind === "money";
+                  const isPart = item.kind === "part";
                   const declared = Number(item.amount ?? 0);
                   const creditRaw = credit[item.id] ?? String(declared);
                   const creditAmount = Number(creditRaw.replace(/[,\s]/g, ""));
@@ -176,6 +185,17 @@ function MigrationsPage() {
                                 Note: {item.note}
                               </div>
                             )}
+                          </>
+                        ) : isPart ? (
+                          <>
+                            <div className="font-medium">Part: {item.part?.name ?? item.carName}</div>
+                            <div className="text-xs text-muted-foreground">
+                              on {item.part?.carName ?? `catalog car ${item.catalogCarId}`}
+                              {item.ownedCarId ? ` (car #${item.ownedCarId}, already imported)` : " (car in review)"}
+                            </div>
+                            <div className="mt-0.5 text-xs text-muted-foreground">
+                              Meanwhile: {item.part?.interim ?? "stock part"}
+                            </div>
                           </>
                         ) : (
                           <>
@@ -235,6 +255,19 @@ function MigrationsPage() {
                               >
                                 <Check className="size-3.5" aria-hidden />
                                 Credit
+                              </ConfirmButton>
+                            ) : isPart ? (
+                              <ConfirmButton
+                                variant="default"
+                                destructive={false}
+                                title={`Grant “${item.part?.name ?? item.carName}” to ${item.player}?`}
+                                description={`The part is granted through the award service with idempotency key migrate-part:${item.id}, so it can only happen once and a limited part fails if its supply is used up. It replaces the stand-in on the imported car, or goes to the racer's spare parts.`}
+                                confirmLabel="Approve and grant"
+                                disabled={decide.isPending}
+                                onConfirm={() => decide.mutate({ id: item.id, verb: "approve", part: true })}
+                              >
+                                <Check className="size-3.5" aria-hidden />
+                                Approve
                               </ConfirmButton>
                             ) : (
                               <ConfirmButton
