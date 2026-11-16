@@ -157,7 +157,7 @@ function OverviewPage() {
         />
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-[1.4fr_1fr]">
+      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[1.4fr_1fr]">
         <Panel
           title="Who's on track"
           count={players.length}

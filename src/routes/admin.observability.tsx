@@ -158,7 +158,7 @@ function ObservabilityPage() {
         <StatTile label="Log level" value={summary.data?.logLevel ?? "—"} />
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_20rem]">
+      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_20rem]">
         <Panel title="Live event tail" count={eventList.length} note="Refreshes every 5s">
           <form
             className="mb-3 grid gap-3 sm:grid-cols-2"
@@ -208,7 +208,7 @@ function ObservabilityPage() {
                     <Cell mono className="text-muted-foreground">
                       {row.accountId ? `#${row.accountId}` : "—"}
                     </Cell>
-                    <Cell className="max-w-[26rem] break-words">
+                    <Cell className="max-w-[26rem] break-all font-mono text-xs">
                       {row.message || row.detail || "—"}
                     </Cell>
                   </Row>

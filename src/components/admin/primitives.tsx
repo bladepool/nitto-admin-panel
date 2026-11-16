@@ -22,13 +22,13 @@ export function Panel({
   return (
     <section
       className={cn(
-        "rounded-xl border border-border bg-card shadow-panel backdrop-blur-sm",
+        "min-w-0 rounded-xl border border-border bg-card shadow-panel backdrop-blur-sm",
         className,
       )}
     >
       {(title || actions) && (
         <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-surface-raised/60 px-4 py-3">
-          <div className="flex items-baseline gap-3">
+          <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
             {title && (
               <h2 className="text-sm font-semibold tracking-wide text-foreground">{title}</h2>
             )}

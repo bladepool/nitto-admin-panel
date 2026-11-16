@@ -199,7 +199,7 @@ function SupportPage() {
         </div>
       </Panel>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <Panel title="Tickets" count={tickets.length} actions={<Button size="sm" variant="ghost" onClick={() => list.refetch()} aria-label="Refresh"><RefreshCw className="size-3.5" aria-hidden /></Button>}>
           {list.isLoading ? (
             <LoadingState label="Reading the desk" />

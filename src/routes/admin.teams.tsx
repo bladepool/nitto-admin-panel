@@ -70,7 +70,7 @@ function TeamsPage() {
     <>
       <PageHeading title="Teams" subtitle="Roster lookup for every team in the paddock." />
 
-      <div className="grid gap-4 xl:grid-cols-[22rem_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[22rem_minmax(0,1fr)]">
         <Panel title="Team search" count={teams.length}>
           <form
             className="flex gap-2"
