@@ -161,7 +161,7 @@ export function AdminShell({
 
           {banner}
 
-          <main className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-5 sm:px-6">{children}</main>
+          <main className="mx-auto w-full min-w-0 max-w-[1400px] flex-1 px-4 py-5 sm:px-6">{children}</main>
         </div>
       </div>
       {session && <CopilotDock role={Number(session.roleClass ?? 0)} />}

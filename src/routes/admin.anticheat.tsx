@@ -308,7 +308,7 @@ function AntiCheatPage() {
 
           <Distributions days={Math.max(days, 30)} />
 
-          <div className="mt-4 grid gap-4 xl:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-2">
             <Panel title="Threat detector signals" note="threat_events, recorded alongside (THREAT_MODE=log: no auto-bans)">
               {o.threats.length === 0 ? (
                 <EmptyState>No threat events in this window.</EmptyState>
@@ -330,7 +330,7 @@ function AntiCheatPage() {
                 {Object.entries(o.thresholds).map(([k, v]) => (
                   <div key={k} className="contents">
                     <dt className="font-mono text-muted-foreground">{k}</dt>
-                    <dd className="numeric">{typeof v === "object" ? JSON.stringify(v) : String(v)}</dd>
+                    <dd className="numeric min-w-0 break-all">{typeof v === "object" ? JSON.stringify(v) : String(v)}</dd>
                   </div>
                 ))}
               </dl>
@@ -608,7 +608,7 @@ function Distributions({ days }: { days: number }) {
       {q.isLoading && <LoadingState label="Loading distributions" />}
       {q.isError && <ErrorState error={q.error} what="distributions" />}
       {q.data && (
-        <div className="grid gap-6 xl:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
           <div>
             <div className="mb-2 flex flex-wrap items-center gap-1.5">
               <span className="label-eyebrow mr-1">ET ÷ predicted best</span>

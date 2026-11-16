@@ -126,7 +126,7 @@ function AccessCodesPage() {
           className="flex flex-wrap items-end gap-3"
           onSubmit={(e) => {
             e.preventDefault();
-            generate.mutate({ count, batch: batch.trim() || undefined });
+            generate.mutate(batch.trim() ? { count, batch: batch.trim() } : { count });
           }}
         >
           <Field label="How many" className="w-28">

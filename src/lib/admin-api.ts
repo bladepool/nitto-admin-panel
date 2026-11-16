@@ -138,11 +138,17 @@ export async function api<T = Json>(
   if (!response.ok || record["ok"] === false) {
     const reason = typeof record["reason"] === "string" ? record["reason"] : undefined;
     const error = typeof record["error"] === "string" ? record["error"] : undefined;
+    const message = typeof record["message"] === "string" ? record["message"] : "";
+    // Only a missing ROUTE means "not served here"; a 404 the API answers itself ("no such racer",
+    // "account not found") is a normal error with its own message.
+    const missingRoute =
+      response.status === 404 &&
+      (reason === "admin_api_not_mounted" || /^Route .* not found$/.test(message) || (!error && !reason));
     throw new ApiError(reasonText(reason) || error || `Request failed (${response.status})`, {
       status: response.status,
       reason,
       payload,
-      offline: response.status === 404,
+      offline: missingRoute,
     });
   }
 

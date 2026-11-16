@@ -83,31 +83,80 @@ const RULE_KINDS = [
   { value: "city", label: "Home city (shown while living there)", hint: "100..500" },
 ];
 
-const imageUrl = (id: string | number) => `/api/admin/badges/image/${id}`;
 const gameKey = (...parts: unknown[]) => ["game", "badges", ...parts];
 
-function BadgeIcon({ icon, className }: { icon: string | number | null; className?: string }) {
+/*
+ * Badge art exactly as the client draws it (decompiled classes/Badges.as + TrophyRoom.as):
+ *  - profile / roster strip: the small badges.swf bitmap, 43 x 43, each next badge drawn `width - 4`
+ *    to the right (a 4 px overlap), tooltip = the badge name (Lookup.badgeAltText);
+ *  - trophy room: the large bitmap, 150 x 150 in a 150 px grid, tooltip = name + description.
+ * The PNGs are the client's own badges.swf exports, shipped as static staff assets in public/badges/<id>.png
+ * (the large art; the browser scales it to the strip size like the client's small copy).
+ */
+export const BADGE_STRIP_PX = 43;
+const BADGE_OVERLAP_PX = 4;
+const badgeArtUrl = (id: string | number) => `/badges/${encodeURIComponent(String(id))}.png`;
+
+function BadgeArt({
+  icon,
+  size = BADGE_STRIP_PX,
+  title,
+  dim = false,
+  className,
+}: {
+  icon: string | number | null;
+  size?: number | undefined;
+  title?: string | undefined;
+  dim?: boolean | undefined;
+  className?: string | undefined;
+}) {
   const [broken, setBroken] = useState(false);
+  const style = { width: size, height: size };
   if (icon == null || icon === "" || broken) {
     return (
       <span
+        title={title ?? (icon != null && icon !== "" ? `No art for badge #${icon}` : "No icon")}
+        style={style}
         className={cn(
-          "inline-flex size-8 items-center justify-center rounded border border-dashed border-border text-[0.625rem] text-muted-foreground",
+          "inline-flex shrink-0 items-center justify-center rounded border border-dashed border-border bg-muted/30 text-[0.625rem] text-muted-foreground",
           className,
         )}
       >
-        {icon ?? "—"}
+        {icon != null && icon !== "" ? `#${icon}` : "—"}
       </span>
     );
   }
   return (
     <img
-      src={imageUrl(icon)}
-      alt={`Badge image ${icon}`}
+      src={badgeArtUrl(icon)}
+      alt={title ?? `Badge ${icon}`}
+      title={title}
+      width={size}
+      height={size}
       loading="lazy"
+      decoding="async"
+      draggable={false}
       onError={() => setBroken(true)}
-      className={cn("size-8 object-contain", className)}
+      style={style}
+      className={cn(
+        "shrink-0 select-none object-contain",
+        dim && "opacity-40 grayscale",
+        className,
+      )}
     />
+  );
+}
+
+/** The client's badge strip: 43 px badges, each overlapping the previous by 4 px, name on hover. */
+function BadgeStrip({ items }: { items: { key: string; icon: string | null; name: string; dim?: boolean | undefined }[] }) {
+  return (
+    <div className="flex flex-wrap items-center" style={{ paddingLeft: BADGE_OVERLAP_PX }}>
+      {items.map((item) => (
+        <span key={item.key} style={{ marginLeft: -BADGE_OVERLAP_PX }} className="inline-flex">
+          <BadgeArt icon={item.icon} title={item.name} dim={item.dim} />
+        </span>
+      ))}
+    </div>
   );
 }
 
@@ -162,7 +211,7 @@ function BadgesPage() {
         <StatTile label="Unused images" value={integer(free)} hint={`of ${items.length}`} />
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_24rem]">
+      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_24rem]">
         <Panel title="Badge definitions" count={list.length}>
           {defs.isLoading ? (
             <LoadingState label="Reading badges" />
@@ -175,7 +224,7 @@ function BadgesPage() {
               {list.map((def) => (
                 <Row key={def.key} className={def.active ? "" : "opacity-60"}>
                   <Cell>
-                    <BadgeIcon icon={def.icon} />
+                    <BadgeArt icon={def.icon} title={def.name} dim={!def.active} />
                   </Cell>
                   <Cell>
                     <div className="font-medium">{def.name}</div>
@@ -226,6 +275,14 @@ function BadgesPage() {
         <GrantPanel defs={list} />
       </div>
 
+      <div className="mt-4">
+        <InventoryPanel
+          items={items}
+          isLoading={inventory.isLoading}
+          error={inventory.isError ? inventory.error : null}
+        />
+      </div>
+
       <Dialog open={editing != null} onOpenChange={(open) => !open && setEditing(null)}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
           {editing != null && (
@@ -239,6 +296,97 @@ function BadgesPage() {
         </DialogContent>
       </Dialog>
     </>
+  );
+}
+
+/** Trophy-room scale for the gallery: the client's 150 px large art at half size. */
+const GALLERY_PX = 75;
+
+/** Every badge in the client's badges.swf, drawn from its own art; greyed when no definition awards it. */
+function InventoryPanel({
+  items,
+  isLoading,
+  error,
+}: {
+  items: InventoryItem[];
+  isLoading: boolean;
+  error: unknown;
+}) {
+  const [category, setCategory] = useState("");
+  const [search, setSearch] = useState("");
+  const [onlyFree, setOnlyFree] = useState(false);
+  const categories = useMemo(() => [...new Set(items.map((item) => item.category))].sort(), [items]);
+  const needle = search.trim().toLowerCase();
+  const visible = items.filter(
+    (item) =>
+      (!category || item.category === category) &&
+      (!onlyFree || !item.assignedTo) &&
+      (!needle ||
+        String(item.id) === needle ||
+        item.description.toLowerCase().includes(needle) ||
+        (item.assignedTo ?? "").toLowerCase().includes(needle)),
+  );
+  const used = items.filter((item) => item.assignedTo).length;
+
+  return (
+    <Panel
+      title="Client badge inventory"
+      count={visible.length}
+      note={`badges.swf art · ${used} backed by a definition · grey = not awarded by any definition`}
+    >
+      <div className="mb-3 flex flex-wrap items-center gap-3">
+        <Input
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Name, id or definition key"
+          aria-label="Search client badges"
+          className="w-full sm:w-64"
+        />
+        <NativeSelect
+          className="w-full sm:w-44"
+          value={category}
+          onChange={(event) => setCategory(event.target.value)}
+          options={[
+            { value: "", label: "All categories" },
+            ...categories.map((value) => ({ value, label: value })),
+          ]}
+        />
+        <label className="flex items-center gap-2 text-xs">
+          <Switch checked={onlyFree} onCheckedChange={setOnlyFree} />
+          Unused only
+        </label>
+      </div>
+      {isLoading ? (
+        <LoadingState label="Reading badges.swf inventory" />
+      ) : error ? (
+        <ErrorState error={error} what="the badge inventory" />
+      ) : visible.length === 0 ? (
+        <EmptyState>No badges in this view.</EmptyState>
+      ) : (
+        <div
+          className="scroll-slim grid max-h-[34rem] gap-1 overflow-y-auto rounded-md bg-[#1a1a1a] p-2"
+          style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${GALLERY_PX + 8}px, 1fr))` }}
+        >
+          {visible.map((item) => (
+            <figure
+              key={item.id}
+              className="flex flex-col items-center gap-0.5 rounded p-1 hover:bg-white/5"
+              title={`${item.description}${item.assignedTo ? ` · definition “${item.assignedTo}”` : " · no definition"}${item.confirmed ? "" : " (name unconfirmed)"}`}
+            >
+              <BadgeArt
+                icon={item.id}
+                size={GALLERY_PX}
+                title={item.description}
+                dim={!item.assignedTo}
+              />
+              <figcaption className="numeric w-full truncate text-center text-[0.625rem] text-white/60">
+                #{item.id}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+    </Panel>
   );
 }
 
@@ -373,7 +521,7 @@ function BadgeForm({
         <fieldset className="rounded-lg border border-border p-3">
           <legend className="label-eyebrow px-1">Icon</legend>
           <div className="mb-3 flex flex-wrap items-center gap-3">
-            <BadgeIcon icon={icon || null} className="size-12" />
+            <BadgeArt icon={icon || null} size={150} title={selected?.description} className="rounded-md bg-[#1a1a1a]" />
             <div className="min-w-0 flex-1 text-xs text-muted-foreground">
               {selected
                 ? `#${selected.id} · ${selected.description} · ${selected.category}${selected.confirmed ? "" : " (unconfirmed)"}`
@@ -424,7 +572,7 @@ function BadgeForm({
                       taken && "cursor-not-allowed opacity-40",
                     )}
                   >
-                    <BadgeIcon icon={item.id} />
+                    <BadgeArt icon={item.id} title={item.description} />
                     <span className="numeric text-[0.625rem] text-muted-foreground">{item.id}</span>
                   </button>
                 );
@@ -548,20 +696,21 @@ function GrantPanel({ defs }: { defs: BadgeDef[] }) {
             {current.length === 0 ? (
               <p className="text-xs text-muted-foreground">No badges.</p>
             ) : (
-              <div className="flex flex-wrap gap-1.5">
-                {current.map((key) => {
-                  const def = defs.find((item) => item.key === key);
-                  return (
-                    <span
-                      key={key}
-                      className="inline-flex items-center gap-1.5 rounded-md border border-border px-1.5 py-1 text-xs"
-                    >
-                      <BadgeIcon icon={def?.icon ?? null} className="size-5" />
-                      {def?.name ?? key}
-                    </span>
-                  );
-                })}
-              </div>
+              <>
+                <div className="rounded-md bg-[#1a1a1a] p-1.5">
+                  <BadgeStrip
+                    items={current.map((key) => {
+                      const def = defs.find((item) => item.key === key);
+                      return { key, icon: def?.icon ?? null, name: def?.name ?? key, dim: def ? !def.active : true };
+                    })}
+                  />
+                </div>
+                <p className="mt-1.5 text-xs text-muted-foreground">
+                  {current
+                    .map((key) => defs.find((item) => item.key === key)?.name ?? key)
+                    .join(" · ")}
+                </p>
+              </>
             )}
           </div>
         )}

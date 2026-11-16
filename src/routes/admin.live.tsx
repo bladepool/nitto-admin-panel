@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { api, integer, relativeLabel, roleName } from "@/lib/admin-api";
+import { useAdminSession } from "@/lib/use-admin-session";
 
 export const Route = createFileRoute("/admin/live")({
   head: () => ({
@@ -51,6 +52,8 @@ type OnlinePlayer = {
 
 function LivePage() {
   const queryClient = useQueryClient();
+  const { session } = useAdminSession();
+  const canBroadcast = Number(session?.roleClass ?? 0) >= 3;
 
   const online = useQuery({
     queryKey: ["admin", "online"],
@@ -109,7 +112,7 @@ function LivePage() {
         />
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]">
+      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]">
         <Panel title="Connected racers" count={players.length}>
           {online.isLoading ? (
             <LoadingState label="Reading the paddock" />
@@ -156,7 +159,7 @@ function LivePage() {
         </Panel>
 
         <div className="flex flex-col gap-4">
-          <Panel title="Server broadcast">
+          <Panel title="Server broadcast" note={canBroadcast ? undefined : "Senior moderators and up"}>
             <form
               className="flex flex-col gap-3"
               onSubmit={(event) => {
@@ -174,7 +177,7 @@ function LivePage() {
                   placeholder="Servers restart in 10 minutes."
                 />
               </Field>
-              <Button type="submit" disabled={broadcast.isPending}>
+              <Button type="submit" disabled={!canBroadcast || broadcast.isPending}>
                 <Megaphone className="size-4" aria-hidden />
                 Send broadcast
               </Button>

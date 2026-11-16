@@ -114,10 +114,15 @@ function AccountsPage() {
 
   const action = useMutation({
     mutationFn: async ({ path, body }: { path: string; body: Record<string, unknown> }) =>
-      api<{ account?: Account }>(`/api/admin/accounts/${id}/${path}`, { method: "POST", body }),
+      api<{ account?: Account; queued?: boolean; changed?: boolean }>(
+        `/api/admin/accounts/${id}/${path}`,
+        { method: "POST", body },
+      ),
     onSuccess: (payload) => {
       if (payload.account) setSelected(payload.account);
-      toast.success("Change recorded in the audit log.");
+      if (payload.queued) toast.success("Above your limit: queued for an owner's approval (see Approvals).");
+      else if (payload.changed === false) toast("Nothing changed: the account already had that state.");
+      else toast.success("Change recorded in the audit log.");
       queryClient.invalidateQueries({ queryKey: ["admin", "accounts"] });
     },
     onError: (error: Error) => toast.error(error.message),
@@ -133,7 +138,7 @@ function AccountsPage() {
         subtitle="Find a racer, then adjust balance, VIP, role or moderation state. Every change needs a reason and lands in the audit log."
       />
 
-      <div className="grid gap-4 xl:grid-cols-[22rem_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[22rem_minmax(0,1fr)]">
         <Panel title="Racer lookup" count={accounts.length}>
           <form
             className="flex gap-2"
