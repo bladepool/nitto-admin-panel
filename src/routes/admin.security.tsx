@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api, buildQuery, dateLabel, integer } from "@/lib/admin-api";
+import { ApiAccessPanel, IpBlocksPanel } from "@/components/admin/api-access";
 
 export const Route = createFileRoute("/admin/security")({
   head: () => ({
@@ -130,8 +131,18 @@ function SecurityPage() {
         <TabsList>
           <TabsTrigger value="flags">Flags ({flags.length})</TabsTrigger>
           <TabsTrigger value="cases">Cases ({caseList.length})</TabsTrigger>
+          <TabsTrigger value="api">API access</TabsTrigger>
+          <TabsTrigger value="blocks">IP blocks</TabsTrigger>
           <TabsTrigger value="audit">Audit trail</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="api" className="mt-3">
+          <ApiAccessPanel />
+        </TabsContent>
+
+        <TabsContent value="blocks" className="mt-3">
+          <IpBlocksPanel />
+        </TabsContent>
 
         <TabsContent value="flags" className="mt-3">
           <Panel title="Security flags" count={flags.length}>
