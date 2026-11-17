@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api, buildQuery, dateLabel, integer } from "@/lib/admin-api";
 import { ApiAccessPanel, IpBlocksPanel } from "@/components/admin/api-access";
+import { GameReportsPanel, useGameReportCount } from "@/components/admin/game-reports";
 
 export const Route = createFileRoute("/admin/security")({
   head: () => ({
@@ -93,6 +94,7 @@ function SecurityPage() {
     retry: false,
   });
 
+  const gameReports = useGameReportCount();
   const cases = useQuery({
     queryKey: ["admin", "cases"],
     queryFn: () => api<{ cases?: Case[]; items?: Case[] }>("/api/admin/cases"),
@@ -131,10 +133,15 @@ function SecurityPage() {
         <TabsList>
           <TabsTrigger value="flags">Flags ({flags.length})</TabsTrigger>
           <TabsTrigger value="cases">Cases ({caseList.length})</TabsTrigger>
+          <TabsTrigger value="game-reports">Game reports ({gameReports.data?.cases.length ?? 0})</TabsTrigger>
           <TabsTrigger value="api">API access</TabsTrigger>
           <TabsTrigger value="blocks">IP blocks</TabsTrigger>
           <TabsTrigger value="audit">Audit trail</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="game-reports" className="mt-3">
+          <GameReportsPanel />
+        </TabsContent>
 
         <TabsContent value="api" className="mt-3">
           <ApiAccessPanel />
