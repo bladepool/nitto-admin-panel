@@ -24,6 +24,7 @@ import { Route as AdminInvitesRouteImport } from './routes/admin.invites'
 import { Route as AdminKnowledgeRouteImport } from './routes/admin.knowledge'
 import { Route as AdminLiveRouteImport } from './routes/admin.live'
 import { Route as AdminMigrationsRouteImport } from './routes/admin.migrations'
+import { Route as AdminNewsroomRouteImport } from './routes/admin.newsroom'
 import { Route as AdminObservabilityRouteImport } from './routes/admin.observability'
 import { Route as AdminSecurityRouteImport } from './routes/admin.security'
 import { Route as AdminSupportRouteImport } from './routes/admin.support'
@@ -107,6 +108,11 @@ const AdminMigrationsRoute = AdminMigrationsRouteImport.update({
   path: '/migrations',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNewsroomRoute = AdminNewsroomRouteImport.update({
+  id: '/newsroom',
+  path: '/newsroom',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminObservabilityRoute = AdminObservabilityRouteImport.update({
   id: '/observability',
   path: '/observability',
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/admin/knowledge': typeof AdminKnowledgeRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/migrations': typeof AdminMigrationsRoute
+  '/admin/newsroom': typeof AdminNewsroomRoute
   '/admin/observability': typeof AdminObservabilityRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/support': typeof AdminSupportRoute
@@ -181,6 +188,7 @@ export interface FileRoutesByTo {
   '/admin/knowledge': typeof AdminKnowledgeRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/migrations': typeof AdminMigrationsRoute
+  '/admin/newsroom': typeof AdminNewsroomRoute
   '/admin/observability': typeof AdminObservabilityRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/support': typeof AdminSupportRoute
@@ -206,6 +214,7 @@ export interface FileRoutesById {
   '/admin/knowledge': typeof AdminKnowledgeRoute
   '/admin/live': typeof AdminLiveRoute
   '/admin/migrations': typeof AdminMigrationsRoute
+  '/admin/newsroom': typeof AdminNewsroomRoute
   '/admin/observability': typeof AdminObservabilityRoute
   '/admin/security': typeof AdminSecurityRoute
   '/admin/support': typeof AdminSupportRoute
@@ -232,6 +241,7 @@ export interface FileRouteTypes {
     | '/admin/knowledge'
     | '/admin/live'
     | '/admin/migrations'
+    | '/admin/newsroom'
     | '/admin/observability'
     | '/admin/security'
     | '/admin/support'
@@ -255,6 +265,7 @@ export interface FileRouteTypes {
     | '/admin/knowledge'
     | '/admin/live'
     | '/admin/migrations'
+    | '/admin/newsroom'
     | '/admin/observability'
     | '/admin/security'
     | '/admin/support'
@@ -279,6 +290,7 @@ export interface FileRouteTypes {
     | '/admin/knowledge'
     | '/admin/live'
     | '/admin/migrations'
+    | '/admin/newsroom'
     | '/admin/observability'
     | '/admin/security'
     | '/admin/support'
@@ -403,6 +415,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMigrationsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/newsroom': {
+      id: '/admin/newsroom'
+      path: '/newsroom'
+      fullPath: '/admin/newsroom'
+      preLoaderRoute: typeof AdminNewsroomRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/observability': {
       id: '/admin/observability'
       path: '/observability'
@@ -468,6 +487,7 @@ interface AdminRouteChildren {
   AdminKnowledgeRoute: typeof AdminKnowledgeRoute
   AdminLiveRoute: typeof AdminLiveRoute
   AdminMigrationsRoute: typeof AdminMigrationsRoute
+  AdminNewsroomRoute: typeof AdminNewsroomRoute
   AdminObservabilityRoute: typeof AdminObservabilityRoute
   AdminSecurityRoute: typeof AdminSecurityRoute
   AdminSupportRoute: typeof AdminSupportRoute
@@ -489,6 +509,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminKnowledgeRoute: AdminKnowledgeRoute,
   AdminLiveRoute: AdminLiveRoute,
   AdminMigrationsRoute: AdminMigrationsRoute,
+  AdminNewsroomRoute: AdminNewsroomRoute,
   AdminObservabilityRoute: AdminObservabilityRoute,
   AdminSecurityRoute: AdminSecurityRoute,
   AdminSupportRoute: AdminSupportRoute,

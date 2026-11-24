@@ -182,10 +182,19 @@ export type AdminSession = {
   membership?: boolean;
   canModerate?: boolean;
   canUseStaffTools?: boolean;
+  /** Everyone who can sign in may use the Newsroom (write spotlights + announcements). */
+  canWriteNewsroom?: boolean;
+  /** True only for a NON-staff journalist: the panel then shows the Newsroom alone, no staff tools. */
+  journalist?: boolean;
   accessStatus?: "approved" | "pending" | "denied" | string;
   isOwner?: boolean;
   loggedInAt?: string;
 };
+
+/** A journalist-only session (write access, no staff tools): show only the Newsroom. */
+export function newsroomOnly(session?: AdminSession | null): boolean {
+  return Boolean(session) && !session!.canUseStaffTools && (Boolean(session!.journalist) || Boolean(session!.canWriteNewsroom));
+}
 
 export type SessionResult =
   | { state: "authenticated"; session: AdminSession }

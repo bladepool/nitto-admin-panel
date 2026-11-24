@@ -13,6 +13,7 @@ import {
   LifeBuoy,
   LogOut,
   MessagesSquare,
+  Newspaper,
   Radio,
   Send,
   ShieldAlert,
@@ -28,7 +29,7 @@ import { Button } from "@/components/ui/button";
 import { Pill } from "@/components/admin/primitives";
 import { Emblem } from "@/components/admin/brand";
 import { CopilotDock } from "@/components/admin/copilot-dock";
-import { api, isOwner, roleName, type AdminSession } from "@/lib/admin-api";
+import { api, isOwner, newsroomOnly, roleName, type AdminSession } from "@/lib/admin-api";
 import { CopilotProvider } from "@/lib/copilot";
 import { cn } from "@/lib/utils";
 
@@ -38,10 +39,13 @@ type NavItem = {
   hint: string;
   icon: ComponentType<{ className?: string }>;
   ownerOnly?: boolean;
+  /** Visible to a journalist-only session (which sees nothing else). */
+  newsroom?: boolean;
 };
 
 const NAV: NavItem[] = [
   { to: "/admin", label: "Overview", hint: "Race control", icon: Gauge },
+  { to: "/admin/newsroom", label: "Newsroom", hint: "Spotlights & announcements", icon: Newspaper, newsroom: true },
   { to: "/admin/accounts", label: "Accounts", hint: "Racer lookup", icon: Users },
   { to: "/admin/teams", label: "Teams", hint: "Roster search", icon: UsersRound },
   { to: "/admin/economy", label: "Economy", hint: "Points & codes", icon: Coins },
@@ -77,6 +81,7 @@ export function AdminShell({
   children: ReactNode;
 }) {
   const owner = isOwner(session);
+  const journalistOnly = newsroomOnly(session);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -110,7 +115,7 @@ export function AdminShell({
             aria-label="Admin sections"
             className="flex gap-1 overflow-x-auto px-3 pb-3 lg:flex-col lg:overflow-visible"
           >
-            {NAV.filter((item) => owner || !item.ownerOnly).map((item) => (
+            {NAV.filter((item) => (journalistOnly ? item.newsroom : owner || !item.ownerOnly)).map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
